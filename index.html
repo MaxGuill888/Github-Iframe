@@ -13,13 +13,13 @@
       width: 100%;
       overflow: hidden;
       font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
     }
 
     body {
       display: flex;
       flex-direction: column;
-      background: #111;
-      color: #fff;
     }
 
     .controls {
@@ -87,27 +87,42 @@
 <body>
 
   <div class="controls">
-    <input id="url" type="url" placeholder="https://example.com" value="https://example.com">
+    <input id="url" type="url" placeholder="https://example.com" value="https://">
     <button id="load">Charger</button>
+    <button id="fullscreen">Fullscreen</button>
   </div>
 
-  <div class="embed-wrap">
-    <iframe id="frame" src="https://example.com"></iframe>
+  <div class="embed-wrap" id="embedWrap">
+    <iframe id="frame" src=""></iframe>
     <p class="notice">⚠️ Certaines pages bloquent l'affichage dans une iframe.</p>
   </div>
 
   <script>
     const input = document.getElementById("url");
     const frame = document.getElementById("frame");
-    const btn = document.getElementById("load");
+    const btnLoad = document.getElementById("load");
+    const btnFullscreen = document.getElementById("fullscreen");
+    const embedWrap = document.getElementById("embedWrap");
 
-    btn.addEventListener("click", () => {
-      const url = input.value.trim();
+    // Charger l'URL
+    btnLoad.addEventListener("click", () => {
+      let url = input.value.trim();
       if (!url.startsWith("https://")) {
         alert("L'URL doit commencer par https:// (GitHub Pages est en HTTPS).");
         return;
       }
       frame.src = url;
+    });
+
+    // Fullscreen
+    btnFullscreen.addEventListener("click", () => {
+      if (embedWrap.requestFullscreen) {
+        embedWrap.requestFullscreen();
+      } else if (embedWrap.webkitRequestFullscreen) { /* Safari */
+        embedWrap.webkitRequestFullscreen();
+      } else if (embedWrap.msRequestFullscreen) { /* IE11 */
+        embedWrap.msRequestFullscreen();
+      }
     });
   </script>
 
